@@ -1,0 +1,4 @@
+# ninja log v5
+1	159	7322228069394193	build.ninja	9a0f5c622d948fd2
+0	251	7322228072886906	CMakeFiles/data_structure_with_C.dir/DataStructure/main.c.obj	5fdc6897e987d163
+252	388	7322228074228739	data_structure_with_C.exe	7a54cda9164a9c4d
