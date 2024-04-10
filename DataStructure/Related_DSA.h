@@ -6,7 +6,7 @@
 #define DATA_STRUCTURE_WITH_C_RELATED_DSA_H
 #include "stdio.h"
 #include "stdlib.h"
-#define MAX_SIZE 20
+#define MAX_SIZE 30
 
 // for single linked list  structure
 struct S_node{
@@ -19,11 +19,33 @@ struct D_node{
     struct D_node* next;
     struct D_node* prev;
 };
-//for Stack data structure
-struct Stack {
+//for Stack data structure using array
+struct Stack_A {
     int top;
     int data[MAX_SIZE];
-
+};
+//for Stack data Structure using linked list
+struct SL_node{
+    int data;
+    struct SL_node* next;
+};
+struct Stack_LL{
+    struct SL_node* top;
+};
+//for Queue data structure using linked list
+struct Q_node{
+    int data;
+    struct Q_node* next;
+};
+struct QueueLL{
+    struct Q_node* q_front;
+    struct Q_node* q_back;
+};
+//for Tree data structure
+struct Tree_Node{
+    int data;
+    struct Tree_Node* left;
+    struct Tree_Node* right;
 };
 // -> singly linked list <-//
 
@@ -185,25 +207,25 @@ void D_alldata(struct D_node* Node){
 }
 // -> double linked list <- //
 
-// -> Stack Data Structure <- //
+// -> Stack Data Structure using Array<- //
 
-void initialize(struct Stack *stack){
+void SA_initialize(struct Stack_A *stack){
     stack->top=-1;
 
 }
 
-int isFull(struct Stack* stack){
+int SA_isFull(struct Stack_A* stack){
     return (stack->top==MAX_SIZE-1);
 }
 
 
-int isEmpty(struct Stack* stack){
+int SA_isEmpty(struct Stack_A* stack){
     return stack->top == -1;
 }
 
 
-void push(struct Stack* stack, int value){
-    if(isFull(stack)){
+void SA_push(struct Stack_A* stack, int value){
+    if(SA_isFull(stack)){
         printf("Stack is full \n");
         exit(3);
     }else{
@@ -213,8 +235,8 @@ void push(struct Stack* stack, int value){
 
 }
 
-int pop(struct Stack* stack){
-    if (isEmpty(stack)){
+int SA_pop(struct Stack_A* stack){
+    if (SA_isEmpty(stack)){
         printf("Underflow \n");
         exit(3);
     }
@@ -222,16 +244,16 @@ int pop(struct Stack* stack){
     return stack->data[stack->top--];
 }
 
-int peek(struct Stack* stack){
-    if (isEmpty(stack)){
+int SA_peek(struct Stack_A* stack){
+    if (SA_isEmpty(stack)){
         printf("NO Data \n");
     }
 
     return stack->data[stack->top];
 }
 
-void display(struct Stack *stack) {
-    if (isEmpty(stack)) {
+void SA_display(struct Stack_A* stack) {
+    if (SA_isEmpty(stack)) {
         printf("Stack is empty.\n");
     } else {
         for (int i = stack->top; i >= 0; i--) {
@@ -241,6 +263,208 @@ void display(struct Stack *stack) {
     }
 }
 
-// -> Stack Data Structure <- //
+// -> Stack Data Structure using Array <- //
+
+// -> Stack Data Structure using Linked list <- //
+void SL_initializeStack(struct Stack_LL* stack){
+    stack->top=NULL;
+}
+int SL_isEmpty(struct Stack_LL* stack){
+    return (stack->top==NULL);
+}
+void SL_push(struct Stack_LL* stack,int data){
+    struct SL_node* newNode=(struct SL_node*) malloc(sizeof (struct SL_node));
+    if(newNode == NULL){
+        printf("Memory Allocation failed \n");
+        exit(1);
+    }
+    newNode->data=data;
+    newNode->next=stack->top;
+    stack->top=newNode;
+    printf("New Node Pushed \n");
+}
+int SL_pop(struct Stack_LL* stack){
+    if(SL_isEmpty(stack)){
+        printf("Stack underflow \n");
+        exit(1);
+    }else{
+        struct SL_node* temp=stack->top;
+        int data=temp->data;
+        stack->top=temp->next;
+        free(temp);
+        return data;
+    }
+}
+int SL_peep( struct Stack_LL* stack){
+    if(SL_isEmpty(stack)){
+        printf("Stack underflow \n");
+        exit(1);
+    }
+    return stack->top->data;
+}
+// -> Stack Data Structure using Linked list <- //
+// -> Queue Data Structure using Array <- //
+int Queue[MAX_SIZE];
+int Q_front=-1;
+int Q_back=-1;
+int Q_isFull(){
+    if(Q_back==MAX_SIZE-1){
+        return 1;
+    }else return 0;
+}
+int Q_isEmpty(){
+    if(Q_front==-1){
+        return 1;
+    }else return 0;
+}
+void Enqueue(int data){
+    if(Q_isFull()){
+        printf("Queue is full");
+    }else{
+        if(Q_front==-1) Q_front=0;
+        Q_back++;
+        Queue[Q_back]=data;
+        printf("Adding data queue is successful");
+    }
+}
+// add data to queue with another way 
+// first data index is 0,second data index is 0 and first data index move to 1
+void Another_enqueue(int data){
+    if(Q_isFull()){
+        printf("Queue is full");
+    }else{
+        if(Q_isEmpty())Q_front=0;
+        Q_back++;
+        for (int i = Q_back; i >Q_front ; i--) {
+            Queue[i] =Queue[i-1];
+        }
+        Queue[Q_front]=data;
+    }
+}
+int Dequeue(){
+    int data=-1;
+    if(Q_isEmpty()){
+        printf("No data in queue");
+    }else{
+        data=Queue[Q_front];
+        Q_front++;
+        if(Q_front>Q_back) Q_front=Q_back=-1;
+    }
+    return data;
+}
+void display(){
+    if(Q_back==-1){
+        printf("Queue is empty");
+    }else{
+        for(int i=Q_front;i<=Q_back;i++){
+            printf("%d ",Queue[i]);
+        }
+        printf("\n");
+    }
+}
+// -> Queue Data Structure using Array <- //
+// -> Queue Data Structure using Linked list <- //
+int QLL_isEmpty(struct QueueLL* queue){
+    return (queue->q_front==NULL);
+}
+struct QueueLL* createQueue(){
+    struct QueueLL* queue=(struct QueueLL*) malloc(sizeof (struct QueueLL));
+    if(queue==NULL){
+        printf("Memory allocation failed");
+        exit(1);
+    }
+    queue->q_front=queue->q_back=NULL;
+    return queue;
+}
+void LL_enqueue(struct QueueLL* queue,int data){
+    struct Q_node* newNode=(struct Q_node*) malloc(sizeof (struct Q_node));
+    if(newNode==NULL){
+        printf("Memory allocation failed");
+        exit(1);
+    }
+    newNode->data=data;
+    newNode->next=NULL;
+    if(QLL_isEmpty(queue)){
+        queue->q_front=queue->q_back=newNode;
+    } else{
+        queue->q_back->next=newNode;
+        queue->q_back=newNode;
+    }
+}
+int LL_dequeue(struct QueueLL* queue){
+    if(QLL_isEmpty(queue)){
+        printf("queue is empty .\n");
+        exit(1);
+    }
+    struct Q_node* QNode=queue->q_front;
+    int data=QNode->data;
+    queue->q_front=queue->q_front->next;
+    free(QNode);
+    return data;
+}
+void QLL_display(struct QueueLL* queue){
+    if(QLL_isEmpty(queue)){
+        printf("no data in queue \n");
+        exit(1);
+    }
+    struct Q_node* temp_Node=queue->q_front;
+    while (temp_Node!=NULL){
+        printf("queue element are %d :",temp_Node->data);
+       temp_Node =temp_Node->next;
+    }
+}
+// -> Queue Data Structure using Linked List <- //
+// -> Tree Data Structure <- //
+struct Tree_Node* createNode(int data){
+    struct Tree_Node* newNode=(struct Tree_Node*) malloc(sizeof (struct Tree_Node));
+    if(newNode==NULL){
+        printf("Memory allocation fail");
+        exit(1);
+    }
+    newNode->data=data;
+    newNode->left=NULL;
+    newNode->right=NULL;
+    return newNode;
+}
+struct Tree_Node* Find_Min(struct Tree_Node* root){
+    while (root->left!=NULL){
+        root=root->left;
+    }
+    return root;
+}
+struct Tree_Node* insert_Node(struct Tree_Node* root,int data){
+    if(root == NULL){
+        root=createNode(data);
+    }else if(data<root->data){
+        root->left= insert_Node(root->left,data);
+    } else{
+        root->right= insert_Node(root->right,data);
+    }
+    return root;
+}
+struct Tree_Node* dalete_Node(struct Tree_Node* root,int data){
+    if(root==NULL){
+        return root;
+    }else if(data<root->data){
+        root->left= dalete_Node(root->left,data);
+    }else if(data>root->data){
+        root->right= dalete_Node(root->right,data);
+    }else{
+        if(root->left==NULL){
+            struct Tree_Node* temp=root->right;
+            free(root);
+            return temp;
+        }else if(root->right==NULL){
+            struct Tree_Node* temp=root->left;
+            free(root);
+            return temp;
+        }
+        struct Tree_Node* temp= Find_Min(root->right);
+        root->data=temp->data;
+        root->right= dalete_Node(root->right,temp->data);
+    }
+    return root;
+}
+// -> Tree Data Structure <- //
 
 #endif //DATA_STRUCTURE_WITH_C_RELATED_DSA_H
